@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b5f68" />
+  <title>Lingua Coach Free</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{--bg:#f7f6f2;--surface:#fbfbf8;--surface2:#f0ede8;--line:#d8d2ca;--text:#22211e;--muted:#6a6964;--primary:#0b5f68;--primary2:#0f7e8a;--accent:#d9ecef;--good:#2f7a31;--warn:#b56900;--bad:#a13544;--radius:18px;--shadow:0 12px 30px rgba(23,25,22,.08)}
+    [data-theme="dark"]{--bg:#171614;--surface:#1e1c19;--surface2:#26231f;--line:#39352f;--text:#ece6dc;--muted:#a59d91;--primary:#69b9c4;--primary2:#8fd0d8;--accent:#24393c;--good:#79c56d;--warn:#f2b04c;--bad:#e57b8c;--shadow:0 18px 40px rgba(0,0,0,.35)}
+    *{box-sizing:border-box} html,body{margin:0;padding:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)} body{min-height:100vh}
+    .app{max-width:1120px;margin:0 auto;padding:20px 16px 72px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:var(--shadow)}h1{font-size:clamp(1.55rem,1.1rem + 2vw,2.7rem);margin:0}.sub{color:var(--muted);margin-top:4px;font-size:.98rem}.toggle{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 14px;cursor:pointer}
+    .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}@media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}.card h2{margin:0 0 10px;font-size:1.08rem}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:620px){.row{grid-template-columns:1fr}}
+    label{display:block;font-size:.88rem;font-weight:600;margin:0 0 8px}select,input,textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:14px;padding:14px;font:inherit}textarea{min-height:110px;resize:vertical}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button.primary,button.secondary,button.ghost{border:none;border-radius:14px;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer}button.primary{background:var(--primary);color:#fff}button.secondary{background:var(--accent);color:var(--primary)}button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+    .result{margin-top:16px;padding:14px;border-radius:14px;background:var(--surface2);border:1px solid var(--line)}.small{font-size:.92rem;color:var(--muted)}.score{font-size:2.5rem;font-weight:800;letter-spacing:-.03em;margin:0}.ok{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+    .pill{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);font-size:.84rem;color:var(--muted)}.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .checklist{display:grid;gap:8px;margin-top:10px}.checkitem{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}.footer-note{margin-top:14px;color:var(--muted);font-size:.9rem;line-height:1.5}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9rem;word-break:break-word}
+    .livebox{padding:10px 12px;border:1px dashed var(--line);border-radius:12px;background:var(--bg);margin-top:10px}.state{font-weight:700}.trainer{display:grid;gap:10px}.meter{height:12px;background:var(--bg);border-radius:999px;overflow:hidden;border:1px solid var(--line)}.meter > div{height:100%;width:0%;background:linear-gradient(90deg,var(--bad),var(--warn),var(--good));transition:width .25s ease}
+    .endpoint-list{display:grid;gap:8px;margin-top:10px}.endpoint-item{padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:.9rem}
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><div class="logo">LC</div><div><h1>Lingua Coach Free</h1><div class="sub">Ahora prueba varios endpoints gratuitos automáticamente hasta encontrar uno activo.</div></div></div>
+    <button class="toggle" id="themeBtn">Modo oscuro</button>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Preparar frase</h2>
+      <div class="row">
+        <div>
+          <label for="sourceLang">Idioma de entrada</label>
+          <select id="sourceLang"><option value="es">Español</option><option value="it">Italiano</option><option value="en">Inglés</option></select>
+        </div>
+        <div>
+          <label for="targetLang">Idioma objetivo</label>
+          <select id="targetLang"><option value="en">Inglés</option><option value="de">Alemán</option><option value="it">Italiano</option><option value="es">Español</option></select>
+        </div>
+      </div>
+      <label for="phraseInput" style="margin-top:12px">Frase original</label>
+      <textarea id="phraseInput" placeholder="Ejemplo: Necesito confirmar el precio y el tiempo de entrega."></textarea>
+      <div class="btns">
+        <button class="secondary" id="dictateSourceBtn">Dictar frase</button>
+        <button class="primary" id="translateBtn">Traducir gratis</button>
+        <button class="ghost" id="speakTranslatedBtn">Escuchar meta</button>
+      </div>
+      <div class="livebox small" id="sourceHeard">Dictado origen: esperando…</div>
+      <div class="result" id="translationBox"><div class="small">Traducción objetivo</div><div id="translatedText">Aquí aparecerá la frase traducida.</div></div>
+      <div class="livebox small" id="endpointStatus">Estado de traducción: esperando...</div>
+
+      <div class="result trainer">
+        <div class="small">Entrenador real por repetición</div>
+        <div class="btns">
+          <button class="primary" id="trainerStartBtn">Iniciar entrenador</button>
+          <button class="secondary" id="trainerStopBtn">Detener</button>
+          <button class="ghost" id="retryBtn">Intentar una vez</button>
+        </div>
+        <div class="livebox"><span class="state" id="trainerState">Estado:</span> <span id="trainerStateText">Listo.</span></div>
+        <div class="livebox small" id="liveHeard">La app mostrará lo que entienda del micrófono.</div>
+        <div class="meter"><div id="meterBar"></div></div>
+        <div id="assessment" class="result"><p class="score">--</p><div id="assessmentText" class="small">La evaluación aparecerá aquí.</div></div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h2>Motor automático</h2>
+      <div class="checklist">
+        <div class="checkitem"><strong>1.</strong><span>La app intenta varias instancias compatibles con LibreTranslate, porque las públicas pueden variar en disponibilidad y límites. [web:75][web:136][web:139]</span></div>
+        <div class="checkitem"><strong>2.</strong><span>LibreTranslate está pensado especialmente para autoalojarse; las instancias públicas no siempre son estables. [web:75][web:161][web:168][web:170]</span></div>
+        <div class="checkitem"><strong>3.</strong><span>Argos OpenTech publica ejemplos de uso del endpoint <span class="mono">/translate</span>, útil como respaldo compatible. [web:166]</span></div>
+      </div>
+      <label for="customEndpoint" style="margin-top:14px">Endpoint adicional opcional</label>
+      <input id="customEndpoint" placeholder="https://tu-endpoint/translate" />
+      <div class="footer-note">Si conoces otro endpoint compatible con LibreTranslate, puedes añadirlo aquí y la app lo probará primero. La calidad y estabilidad dependen del servidor público disponible. [web:136][web:168]</div>
+      <div class="endpoint-list" id="endpointList"></div>
+    </aside>
+  </div>
+
+  <section class="card" style="margin-top:18px">
+    <h2>Instalación</h2>
+    <div class="small">La app sigue siendo un archivo único listo para GitHub Pages y Android. Si un endpoint deja de funcionar, la app probará el siguiente automáticamente antes de dar error. Esto reduce fallos, aunque no elimina la inestabilidad propia de servicios públicos gratuitos. [web:136][web:140]</div>
+    <div class="footer-note mono">Archivo único listo para instalar: lingua-coach.html</div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const els = { sourceLang:$('sourceLang'), targetLang:$('targetLang'), phraseInput:$('phraseInput'), translatedText:$('translatedText'), assessment:$('assessment'), assessmentText:$('assessmentText'), liveHeard:$('liveHeard'), sourceHeard:$('sourceHeard'), trainerStateText:$('trainerStateText'), meterBar:$('meterBar'), themeBtn:$('themeBtn'), endpointStatus:$('endpointStatus'), customEndpoint:$('customEndpoint'), endpointList:$('endpointList') };
+let lastTranslation = '', trainerActive = false, currentRecognizer = null;
+
+const defaultEndpoints = [
+  'https://translate.argosopentech.com/translate',
+  'https://libretranslate.com/translate'
+];
+
+function persistSettings(){ localStorage.setItem('linguaCoachSettings', JSON.stringify({ sourceLang:els.sourceLang.value, targetLang:els.targetLang.value, customEndpoint:els.customEndpoint.value, theme:document.documentElement.getAttribute('data-theme') || 'light' })); }
+function loadSettings(){ const cfg = JSON.parse(localStorage.getItem('linguaCoachSettings') || '{}'); ['sourceLang','targetLang','customEndpoint'].forEach(k => { if(cfg[k] && els[k]) els[k].value = cfg[k]; }); document.documentElement.setAttribute('data-theme', cfg.theme || 'light'); els.themeBtn.textContent = (cfg.theme || 'light') === 'dark' ? 'Modo claro' : 'Modo oscuro'; renderEndpoints(); }
+['sourceLang','targetLang','customEndpoint'].forEach(id => { $(id).addEventListener('change', ()=>{persistSettings(); renderEndpoints();}); $(id).addEventListener('input', ()=>{persistSettings(); renderEndpoints();}); });
+els.themeBtn.addEventListener('click', ()=>{ const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', next); els.themeBtn.textContent = next === 'dark' ? 'Modo claro' : 'Modo oscuro'; persistSettings(); });
+
+function getEndpoints(){
+  const custom = els.customEndpoint.value.trim();
+  return [...new Set([...(custom ? [custom] : []), ...defaultEndpoints])];
+}
+function renderEndpoints(){
+  els.endpointList.innerHTML = getEndpoints().map((url, i) => `<div class="endpoint-item">${i+1}. ${escapeHtml(url)}</div>`).join('');
+}
+function escapeHtml(str=''){ return str.replace(/[&<>\"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s])); }
+
+async function postTranslate(endpoint, text, source, target){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 7000);
+  try{
+    const r = await fetch(endpoint, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ q:text, source, target, format:'text' }), signal:controller.signal });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    if(!j.translatedText) throw new Error('Sin translatedText');
+    return j.translatedText;
+  } finally { clearTimeout(timer); }
+}
+async function translateText(text, source, target){
+  const endpoints = getEndpoints();
+  let errors = [];
+  for(const endpoint of endpoints){
+    els.endpointStatus.textContent = 'Probando endpoint: ' + endpoint;
+    try{
+      const translated = await postTranslate(endpoint, text, source, target);
+      els.endpointStatus.textContent = 'Traducción lograda con: ' + endpoint;
+      return translated;
+    } catch(e){
+      errors.push(endpoint + ' -> ' + e.message);
+    }
+  }
+  els.endpointStatus.textContent = 'Ningún endpoint respondió.';
+  throw new Error(errors.join(' | '));
+}
+
+function mapLang(code){ return ({en:'en-US',es:'es-ES',de:'de-DE',it:'it-IT'})[code] || 'en-US'; }
+function getSR(){ return window.SpeechRecognition || window.webkitSpeechRecognition; }
+function speakText(text, lang, onEnd){ if(!('speechSynthesis' in window)) return alert('Tu navegador no soporta voz.'); const u = new SpeechSynthesisUtterance(text); u.lang = mapLang(lang); u.rate = .9; if(onEnd) u.addEventListener('end', onEnd); speechSynthesis.cancel(); speechSynthesis.speak(u); }
+$('translateBtn').addEventListener('click', async ()=>{ const text = els.phraseInput.value.trim(); if(!text) return alert('Escribe una frase primero.'); els.translatedText.textContent = 'Traduciendo...'; try { const t = await translateText(text, els.sourceLang.value, els.targetLang.value); lastTranslation = t; els.translatedText.textContent = t || 'Sin resultado.'; } catch(e){ els.translatedText.textContent = 'No se pudo traducir.'; alert('Fallaron todos los endpoints gratuitos: ' + e.message); } });
+$('speakTranslatedBtn').addEventListener('click', ()=>{ const text = lastTranslation || els.translatedText.textContent.trim(); if(!text || text === 'Aquí aparecerá la frase traducida.') return alert('Primero traduce una frase.'); speakText(text, els.targetLang.value); });
+
+function similarity(a,b){ a=(a||'').toLowerCase().trim(); b=(b||'').toLowerCase().trim(); if(!a||!b) return 0; const matrix=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0)); for(let i=0;i<=a.length;i++)matrix[i][0]=i; for(let j=0;j<=b.length;j++)matrix[0][j]=j; for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) matrix[i][j]=Math.min(matrix[i-1][j]+1,matrix[i][j-1]+1,matrix[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); const dist=matrix[a.length][b.length]; return Math.max(0,Math.round((1-dist/Math.max(a.length,b.length))*100)); }
+function paintAssessment(score, heard, reference){ const level = score >= 90 ? 'ok' : score >= 75 ? 'warn' : 'bad'; els.assessment.querySelector('.score').textContent = score; els.assessment.querySelector('.score').className = 'score ' + level; els.meterBar.style.width = score + '%'; els.assessmentText.textContent = score >= 90 ? `Visto bueno. El navegador entendió casi lo mismo que la frase objetivo: “${heard}”.` : `La app entendió: “${heard}”. Objetivo: “${reference}”. Repite más lento y copia la entonación.`; }
+function setState(txt){ els.trainerStateText.textContent = txt; }
+
+function recognizeOnce(langCode, onDone, liveEl){
+  const SR = getSR();
+  if(!SR) return alert('Tu navegador no soporta reconocimiento de voz. Usa Chrome o Edge.');
+  if(currentRecognizer){ try{ currentRecognizer.stop(); }catch{} }
+  const rec = new SR(); currentRecognizer = rec;
+  rec.lang = mapLang(langCode); rec.continuous = true; rec.interimResults = true; rec.maxAlternatives = 1;
+  let finalText = '';
+  rec.onresult = (event) => {
+    let text = '';
+    for (const result of event.results) text += result[0].transcript + ' ';
+    text = text.trim();
+    liveEl.textContent = text ? text : 'Escuchando...';
+    const last = event.results[event.results.length-1];
+    if(last && last.isFinal) finalText = text;
+  };
+  rec.onerror = () => { liveEl.textContent = 'No se pudo entender tu voz.'; onDone(finalText || ''); };
+  rec.onend = () => onDone(finalText || liveEl.textContent || '');
+  rec.start();
+  setTimeout(()=>{ try{ rec.stop(); }catch{} }, 5000);
+}
+
+$('dictateSourceBtn').addEventListener('click', ()=>{
+  els.sourceHeard.textContent = 'Dictado origen: escuchando...';
+  recognizeOnce(els.sourceLang.value, (text)=>{ const clean = (text||'').replace(/^Dictado origen:\s*/,'').trim(); if(clean && clean !== 'No se pudo entender tu voz.') els.phraseInput.value = clean; els.sourceHeard.textContent = 'Dictado origen: ' + (clean || 'sin resultado'); }, els.sourceHeard);
+});
+
+function trainerCycle(){
+  if(!trainerActive) return;
+  const reference = (lastTranslation || els.translatedText.textContent || '').trim();
+  if(!reference || reference === 'Aquí aparecerá la frase traducida.') { trainerActive = false; setState('Primero debes traducir una frase.'); return; }
+  setState('Escucha el modelo...');
+  speakText(reference, els.targetLang.value, ()=>{
+    if(!trainerActive) return;
+    setState('Ahora repite la frase.');
+    els.liveHeard.textContent = 'Escuchando...';
+    recognizeOnce(els.targetLang.value, (heard)=>{
+      if(!trainerActive) return;
+      const clean = (heard||'').replace(/^Escuchando\.\.\.$/,'').trim();
+      const score = similarity(clean, reference);
+      paintAssessment(score, clean || 'sin transcripción', reference);
+      if(score >= 90){
+        trainerActive = false;
+        setState('Aprobado. Pronunciación aceptada.');
+        speakText('Great job', 'en');
+      } else {
+        setState('Vamos otra vez. Escucha y repite.');
+        setTimeout(trainerCycle, 1200);
+      }
+    }, els.liveHeard);
+  });
+}
+
+$('trainerStartBtn').addEventListener('click', ()=>{ trainerActive = true; trainerCycle(); });
+$('trainerStopBtn').addEventListener('click', ()=>{ trainerActive = false; if(currentRecognizer){ try{ currentRecognizer.stop(); }catch{} } speechSynthesis.cancel(); setState('Entrenador detenido.'); });
+$('retryBtn').addEventListener('click', ()=>{ const reference = (lastTranslation || els.translatedText.textContent || '').trim(); if(!reference || reference === 'Aquí aparecerá la frase traducida.') return alert('Primero traduce una frase.'); setState('Intento manual.'); recognizeOnce(els.targetLang.value, (heard)=>{ const clean = (heard||'').trim(); const score = similarity(clean, reference); paintAssessment(score, clean || 'sin transcripción', reference); }, els.liveHeard); });
+
+loadSettings();
+</script>
+</body>
+</html>
+EOF && cp output/lingua-coach/lingua-coach.html output/lingua-coach/index.html
